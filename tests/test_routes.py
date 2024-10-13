@@ -1,14 +1,21 @@
+    import unittest
+from service.common import status
+
+class TestProductAPI(unittest.TestCase):
+    BASE_URL = "http://localhost:5000/products"
+
     def test_get_product(self):
         """It should Get a single Product"""
         # get the id of a product
         test_product = self._create_products(1)[0]
-        response = self.client.get(f"{BASE_URL}/{test_product.id}")
+        response = self.client.get(f"{self.BASE_URL}/{test_product.id}")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.get_json()
         self.assertEqual(data["name"], test_product.name)
+
     def test_get_product_not_found(self):
-    """It should not Get a Product that's not found"""
-    response = self.client.get(f"{BASE_URL}/0")  # Usar un ID que no existe
-    self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-    data = response.get_json()
-    self.assertIn("was not found", data["message"])
+        """It should not Get a Product that's not found"""
+        response = self.client.get(f"{self.BASE_URL}/0")  # Usar un ID que no existe
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        data = response.get_json()
+        self.assertIn("was not found", data["message"])

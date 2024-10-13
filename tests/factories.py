@@ -1,14 +1,15 @@
 from factory import Factory, Sequence, Faker
 from factory.fuzzy import FuzzyChoice, FuzzyDecimal
-from .models import Product, Category  # Asegúrate de importar el modelo Product y Category
+from service.models import Product, Category  # Asegúrate de importar el modelo Product y Category
 
 class ProductFactory(Factory):
     """Creates fake products for testing"""
+    
     class Meta:
         """Maps factory to data model"""
         model = Product
 
-    id = factory.Sequence(lambda n: n)
+    id = Sequence(lambda n: n)
     name = FuzzyChoice(
         choices=[
             "Hat",

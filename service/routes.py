@@ -1,3 +1,9 @@
+from flask import Flask, abort
+from service.models import Product
+from service.common import status
+
+app = Flask(__name__)
+
 ######################################################################
 # READ A PRODUCT
 ######################################################################
@@ -6,7 +12,7 @@ def get_products(product_id):
     """
     Retrieve a single Product
 
-    This endpoint will return a Product based on it's id
+    This endpoint will return a Product based on its id
     """
     app.logger.info("Request to Retrieve a product with id [%s]", product_id)
 

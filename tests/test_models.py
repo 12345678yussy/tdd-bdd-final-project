@@ -103,4 +103,22 @@ class TestProductModel(unittest.TestCase):
 
     #
     # ADD YOUR TEST CASES HERE
-    #
+   def test_read_a_product(self):
+        """It should Read a Product"""
+        product = ProductFactory()
+        # Set the ID of the product object to None and then call the create() method on the product.
+        # Assert that the ID of the product object is not None after calling the create() method.
+        # Fetch the product back from the system using the product ID and store it in found_product
+        # Assert that the properties of the found_product match with the properties of the original product object, such as id, name, description and price.
+    def test_read_a_product(self):
+        """It should Read a Product"""
+        product = ProductFactory()
+        product.id = None
+        product.create()
+        self.assertIsNotNone(product.id)
+        # Fetch it back
+        found_product = Product.find(product.id)
+        self.assertEqual(found_product.id, product.id)
+        self.assertEqual(found_product.name, product.name)
+        self.assertEqual(found_product.description, product.description)
+        self.assertEqual(found_product.price, product.price)

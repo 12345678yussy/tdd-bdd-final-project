@@ -103,13 +103,6 @@ class TestProductModel(unittest.TestCase):
 
     #
     # ADD YOUR TEST CASES HERE
-   def test_read_a_product(self):
-        """It should Read a Product"""
-        product = ProductFactory()
-        # Set the ID of the product object to None and then call the create() method on the product.
-        # Assert that the ID of the product object is not None after calling the create() method.
-        # Fetch the product back from the system using the product ID and store it in found_product
-        # Assert that the properties of the found_product match with the properties of the original product object, such as id, name, description and price.
     def test_read_a_product(self):
         """It should Read a Product"""
         product = ProductFactory()
@@ -122,3 +115,82 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(found_product.name, product.name)
         self.assertEqual(found_product.description, product.description)
         self.assertEqual(found_product.price, product.price)
+    def test_update_a_product(self):
+        """It should Update a Product"""
+        product = ProductFactory()
+        product.id = None
+        product.create()
+        self.assertIsNotNone(product.id)
+        
+        # Change it and save it
+        product.description = "Updated description"
+        original_id = product.id
+        product.update()
+        
+        self.assertEqual(product.id, original_id)
+        self.assertEqual(product.description, "Updated description")
+        
+        # Fetch it back and make sure the id hasn't changed
+        products = Product.all()
+        self.assertEqual(len(products), 1)
+        self.assertEqual(products[0].id, original_id)
+        self.assertEqual(products[0].description, "Updated description")
+
+    def test_delete_a_product(self):
+        """It should Delete a Product"""
+        product = ProductFactory()
+        product.id = None
+        product.create()
+        original_id = product.id
+        
+        # Delete the product
+        product.delete()
+        
+        # Verify that the product no longer exists
+        found_product = Product.find(original_id)
+        self.assertIsNone(found_product)
+
+    def test_list_all_products(self):
+        """It should List all Products"""
+        product1 = ProductFactory()
+        product1.id = None
+        product1.create()
+        
+        product2 = ProductFactory()
+        product2.id = None
+        product2.create()
+        
+        products = Product.all()
+        self.assertEqual(len(products), 2)
+
+    def test_search_product_by_name(self):
+        """It should Search for a Product by Name"""
+        product = ProductFactory(name="Test Product")
+        product.id = None
+        product.create()
+        
+        found_product = Product.find_by_name("Test Product")
+        self.assertEqual(found_product.name, product.name)
+
+    def test_search_product_by_category(self):
+        """It should Search for a Product by Category"""
+        product = ProductFactory(category="Electronics")
+        product.id = None
+        product.create()
+        
+        found_products = Product.find_by_category("Electronics")
+        self.assertGreater(len(found_products), 0)
+        self.assertEqual(found_products[0].category, product.category)
+
+    def test_search_product_by_availability(self):
+        """It should Search for a Product by Availability"""
+        product = ProductFactory(available=True)
+        product.id = None
+        product.create()
+        
+        found_products = Product.find_by_availability(True)
+        self.assertGreater(len(found_products), 0)
+        self.assertTrue(found_products[0].available)
+
+if __name__ == '__main__':
+    unittest.main()
